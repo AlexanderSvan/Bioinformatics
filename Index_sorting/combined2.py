@@ -58,17 +58,17 @@ Name=['AlignTest_A.csv', 'AlignTest_B.csv', 'AlignTest_C.csv', 'AlignTest_D.csv'
 blastDB ='/media/sf_GeCKO/Installation/LibM.db'
 
 #Temporary paths and files for storing interrim datasets
-
+path2=path[0]
 g=''
 e=0
 
-for part in path:
-    print("PROCESSING"+ part +"!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+for part in path2:
+    #print("PROCESSING"+ part +"!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
     fd, tmp = tempfile.mkstemp('.fq')
     fs, tmp2 = tempfile.mkstemp('.fa')
-    print("ALLIGNING TO U6 BINDING SITE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+    #print("ALLIGNING TO U6 BINDING SITE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
     call(["/media/sf_GeCKO/Installation/bbmap/bbduk.sh in=" + part + " outm="+ tmp +" k=23 hdist=1 ref=/media/sf_GeCKO/Installation/AlexAdapt.fa"], shell=True)
-    print("TRIMMING AND MAKING UNIQUE LIST!!!!!!!!!!!!!!!!!!!!!!!")
+    #print("TRIMMING AND MAKING UNIQUE LIST!!!!!!!!!!!!!!!!!!!!!!!")
     call(["/media/sf_GeCKO/Installation/bbmap/bbduk.sh in=" + tmp + " out=stdout.fq ftl=0 ftr=19 | /media/sf_GeCKO/Installation/bbmap/kmercountexact.sh in=stdin.fq k=20 out=" + tmp2 + " overwrite=true"], shell=True)
     
     file=open(tmp)
@@ -77,7 +77,7 @@ for part in path:
     os.remove(tmp)
     g=Name[e]
     call(["blastn -max_target_seqs 1 -word_size 7 -db " + blastDB + " -outfmt 10 -query "+ tmp2 + " -out /media/sf_GeCKO/Installation/CombinedTest/" + Name[e] +""], shell=True)
-    print("FINISHED ALIGNMENT!!!!!!!!!!!!!!!!!!!!!!!!!"+ g +"")
+    #print("FINISHED ALIGNMENT!!!!!!!!!!!!!!!!!!!!!!!!!"+ g +"")
     
     e+=1
     file=open(tmp2)
